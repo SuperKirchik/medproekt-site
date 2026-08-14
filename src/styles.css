@@ -47,7 +47,7 @@
  * never recompose it.
  */
 :root{--app-scale:1}
-html,body,#root{width:100%;max-width:100%;margin:0;overflow-x:hidden}
+html,body,#root{width:100%;max-width:100%;margin:0}
 .scale-viewport{position:relative;width:100%;overflow:hidden}
 .app-scale{width:2560px;max-width:none;transform:scale(var(--app-scale));transform-origin:top left;will-change:transform}
 .app-scale>header,.app-scale>section,.app-scale>footer{width:2560px;max-width:none}
@@ -234,8 +234,9 @@ html body #root .app-scale footer span{display:inline;float:right;margin-top:0}
 /* Mobile: independent responsive layout; desktop scale remains unchanged. */
 .menu-toggle{display:none}
 @media(max-width:767px){
-  html{scroll-padding-top:76px}
-  body{min-width:0;overflow-x:clip}
+  :root{--mobile-header-height:calc(76px + env(safe-area-inset-top,0px))}
+  html{scroll-padding-top:var(--mobile-header-height);-webkit-text-size-adjust:100%}
+  body{width:100%;min-width:0}
   body.menu-open{overflow:hidden}
   html body #root .scale-viewport{height:auto!important;overflow:visible}
   html body #root .app-scale{width:100%;min-width:0;max-width:none;transform:none;zoom:1;will-change:auto}
@@ -243,7 +244,7 @@ html body #root .app-scale footer span{display:inline;float:right;margin-top:0}
   html body #root .app-scale>section,
   html body #root .app-scale>footer{width:100%;min-width:0;max-width:none}
 
-  html body #root .app-scale .nav{position:fixed;inset:0 0 auto;width:100%;height:76px;min-height:76px;padding:8px 18px;display:flex;flex-wrap:nowrap;justify-content:space-between;gap:12px;background:rgba(24,58,59,.98);z-index:2000}
+  html body #root .app-scale .nav{position:fixed;inset:0 0 auto;width:100%;height:var(--mobile-header-height);min-height:var(--mobile-header-height);padding:calc(8px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) 8px max(18px,env(safe-area-inset-left,0px));display:flex;flex-wrap:nowrap;justify-content:space-between;gap:12px;background:rgba(24,58,59,.98);z-index:2000}
   html body #root .app-scale .nav img{width:130px;height:58px}
   html body #root .app-scale .header-logo{order:0;position:relative;z-index:2}
   html body #root .app-scale .header-contact{display:none}
@@ -252,12 +253,12 @@ html body #root .app-scale footer span{display:inline;float:right;margin-top:0}
   .menu-toggle.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
   .menu-toggle.is-open span:nth-child(2){opacity:0}
   .menu-toggle.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-  html body #root .app-scale .nav nav{position:fixed;inset:76px 0 0;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;margin:0;padding:28px 20px;background:var(--dark);transform:translateX(100%);opacity:0;visibility:hidden;transition:transform .28s ease,opacity .2s ease,visibility .28s;overflow-y:auto}
+  html body #root .app-scale .nav nav{position:fixed;inset:var(--mobile-header-height) 0 0;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;width:100%;max-width:100%;height:calc(100dvh - var(--mobile-header-height));margin:0;padding:28px max(20px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));background:var(--dark);transform:translate3d(100%,0,0);opacity:0;visibility:hidden;transition:transform .28s ease,opacity .2s ease,visibility .28s;overflow-y:auto;-webkit-overflow-scrolling:touch}
   html body #root .app-scale .nav nav.is-open{transform:none;opacity:1;visibility:visible}
   html body #root .app-scale .nav nav>a:not(.call-btn){display:flex;width:100%;padding:18px 4px;border-bottom:1px solid #527877;font-size:20px}
   html body #root .app-scale .nav nav .call-btn{display:flex;width:100%;min-height:52px;margin-top:28px;justify-content:center;font-size:17px}
 
-  html body #root .app-scale .hero{height:auto;min-height:0;padding-top:76px;display:flex;flex-direction:column}
+  html body #root .app-scale .hero{height:auto;min-height:0;padding-top:var(--mobile-header-height);display:flex;flex-direction:column}
   html body #root .app-scale .hero-copy{order:1;width:100%;max-width:none;padding:52px 20px 38px;transform:none}
   html body #root .app-scale .hero-copy h1{width:100%;max-width:none;margin-bottom:22px;font-size:clamp(34px,10vw,43px);line-height:1.08;overflow-wrap:break-word}
   html body #root .app-scale .hero-copy .hero-slogan{font-size:clamp(18px,5.4vw,22px);line-height:1.35}
@@ -535,4 +536,13 @@ html body #root .app-scale .contact-location .yandex-map{display:block;width:100
 
 .cookie-banner{position:fixed;right:28px;bottom:28px;z-index:5000;display:flex;align-items:center;gap:28px;width:min(620px,calc(100vw - 56px));padding:22px 24px;border:1px solid #527877;border-radius:8px;background:var(--dark);color:var(--light);box-shadow:0 18px 48px rgba(0,0,0,.3)}
 .cookie-banner p{flex:1;margin:0;font-size:15px;line-height:1.5}.cookie-banner .btn{flex:0 0 auto;min-width:130px;min-height:46px}
-@media(max-width:767px){.cookie-banner{right:14px;bottom:14px;left:14px;width:auto;padding:18px;flex-direction:column;align-items:stretch;gap:16px}.cookie-banner p{font-size:14px}.cookie-banner .btn{width:100%;min-height:50px}}
+@media(max-width:767px){
+  .cookie-banner{right:max(14px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));left:max(14px,env(safe-area-inset-left,0px));width:auto;max-width:none;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));flex-direction:column;align-items:stretch;gap:16px}
+  .cookie-banner p{font-size:14px}.cookie-banner .btn{width:100%;min-height:50px}
+  html body #root .app-scale footer{padding-bottom:calc(48px + env(safe-area-inset-bottom,0px))}
+  html body #root .app-scale .contact-page-hero,html body #root .app-scale .service-page,html body #root .app-scale .licenses-page{padding-top:calc(126px + env(safe-area-inset-top,0px))}
+  html body #root .app-scale img,html body #root .app-scale iframe{max-width:100%}
+  html body #root .app-scale section,html body #root .app-scale section>*{min-width:0}
+  html body #root .app-scale input,html body #root .app-scale textarea,html body #root .app-scale button{max-width:100%;border-radius:6px;-webkit-appearance:none;appearance:none}
+  html body #root .app-scale a,html body #root .app-scale button{touch-action:manipulation}
+}
