@@ -210,6 +210,7 @@ html,body,#root{width:100%;max-width:100%;margin:0}
 .step-top .timeline-copy{transform:translateY(15px)}
 .reference-contacts .contact-grid i{width:96px;height:96px;font-size:76px;line-height:96px}
 .form textarea{width:100%;height:180px;min-height:180px;max-height:180px;resize:none}
+.form-honeypot{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}.form .btn:disabled{opacity:.65;cursor:wait}.form-status{margin:0;text-align:center;font-weight:600}.form-status.success{color:#245f4c}.form-status.error{color:#9b3327}
 .faq-answer:not(.is-open){display:none}.faq-answer.is-open>div>p{margin-bottom:0}
 
 /* Общая desktop-направляющая по заголовку контактов */
