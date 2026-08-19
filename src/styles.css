@@ -340,7 +340,7 @@ html body #root .app-scale footer span{display:inline;float:right;margin-top:0}
   html body #root .app-scale .btn{display:inline-flex;align-items:center;justify-content:center}
 
   html body #root .app-scale .hero-copy{padding-top:44px}
-  html body #root .app-scale .hero-copy h1{font-size:clamp(32px,9.6vw,42px);letter-spacing:0}
+  html body #root .app-scale .hero-copy h1{font-size:clamp(27px,8vw,36px);letter-spacing:0}
   html body #root .app-scale .hero-art{height:clamp(470px,132vw,530px)}
   html body #root .app-scale .hero-person{top:14px;width:min(86vw,330px);height:390px}
   html body #root .app-scale .hero-services{max-height:190px;margin:0;overflow:hidden}
@@ -352,7 +352,7 @@ html body #root .app-scale footer span{display:inline;float:right;margin-top:0}
 
   html body #root .app-scale .compact-services{padding-bottom:384px}
   html body #root .app-scale .compact-services .service:last-child{border-bottom:1px solid var(--line)}
-  html body #root .app-scale .services-collage{right:0;bottom:40px;left:20px;height:310px}
+  html body #root .app-scale .services-collage{right:20px;bottom:40px;left:20px;height:310px}
   html body #root .app-scale .services-collage img{width:min(46vw,170px);height:138px}
 
   html body #root .app-scale .timeline-head>p{max-width:34rem}
