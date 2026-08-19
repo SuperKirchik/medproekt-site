@@ -3,6 +3,7 @@ import{createRoot}from'react-dom/client';
 import'./styles.css';
 
 const A='/assets/';
+document.documentElement.dataset.site='medproekt';
 const services=[
   ['01','Купирование запоев','Профессиональная медицинская помощь.'],
   ['02','Лечение алкоголизма','Индивидуальная программа лечения.'],
