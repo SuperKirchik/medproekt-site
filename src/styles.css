@@ -262,7 +262,8 @@ html body #root .app-scale footer span{display:inline;float:right;margin-top:0}
 
   html body #root .app-scale .hero{height:auto;min-height:0;padding-top:var(--mobile-header-height);display:flex;flex-direction:column}
   html body #root .app-scale .hero-copy{order:1;width:100%;max-width:none;padding:52px 20px 38px;transform:none}
-  html body #root .app-scale .hero-copy h1{width:100%;max-width:none;margin-bottom:22px;font-size:clamp(34px,10vw,43px);line-height:1.08;overflow-wrap:break-word}
+  html body #root .app-scale .hero-copy h1{width:100%;max-width:none;margin-bottom:22px;font-size:clamp(28px,9.2vw,43px);line-height:1.08;overflow-wrap:break-word}
+  html body #root .app-scale .hero-title-nowrap{white-space:nowrap}
   html body #root .app-scale .hero-copy .hero-slogan{font-size:clamp(18px,5.4vw,22px);line-height:1.35}
   html body #root .app-scale .hero-copy>div{display:grid;grid-template-columns:1fr;gap:12px;margin-top:28px}
   html body #root .app-scale .hero-copy>div .btn{width:100%;min-width:0;min-height:52px;padding:12px 18px;font-size:16px}
