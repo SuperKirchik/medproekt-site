@@ -1,4 +1,7 @@
 import express from 'express';
+import dns from 'node:dns';
+
+dns.setDefaultResultOrder('ipv4first');
 
 const app = express();
 const port = Number(process.env.PORT) || 8080;
@@ -57,13 +60,19 @@ app.post('/api/lead', async (request, response) => {
     const telegramResponse = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text })
+      body: JSON.stringify({ chat_id: chatId, text }),
+      signal: AbortSignal.timeout(15_000)
     });
-    if (!telegramResponse.ok) throw new Error(`Telegram returned ${telegramResponse.status}`);
+    if (!telegramResponse.ok) {
+      const telegramError = await telegramResponse.text();
+      console.error(`Telegram returned ${telegramResponse.status}:`, telegramError.slice(0, 500));
+      return response.status(502).json({ error: 'Message delivery failed', detail: `Telegram HTTP ${telegramResponse.status}` });
+    }
     response.json({ ok: true });
   } catch (error) {
-    console.error('Telegram delivery failed:', error instanceof Error ? error.message : 'Unknown error');
-    response.status(502).json({ error: 'Message delivery failed' });
+    const detail = error instanceof Error ? `${error.name}: ${error.message}` : 'Unknown error';
+    console.error('Telegram delivery failed:', detail);
+    response.status(502).json({ error: 'Message delivery failed', detail });
   }
 });
 
