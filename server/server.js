@@ -1,5 +1,6 @@
 import express from 'express';
 import dns from 'node:dns';
+import https from 'node:https';
 
 dns.setDefaultResultOrder('ipv4first');
 
@@ -11,7 +12,34 @@ const allowedOrigins = (process.env.ALLOWED_ORIGIN || '')
   .filter(Boolean);
 const attempts = new Map();
 
+function sendTelegramMessage(token, chatId, text) {
+  const payload = JSON.stringify({ chat_id: chatId, text });
+  return new Promise((resolve, reject) => {
+    const telegramRequest = https.request({
+      hostname: 'api.telegram.org',
+      port: 443,
+      path: `/bot${token}/sendMessage`,
+      method: 'POST',
+      family: 4,
+      timeout: 15_000,
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload)
+      }
+    }, telegramResponse => {
+      let body = '';
+      telegramResponse.setEncoding('utf8');
+      telegramResponse.on('data', chunk => { body += chunk; });
+      telegramResponse.on('end', () => resolve({ status: telegramResponse.statusCode || 500, body }));
+    });
+    telegramRequest.on('timeout', () => telegramRequest.destroy(new Error('Telegram request timeout')));
+    telegramRequest.on('error', reject);
+    telegramRequest.end(payload);
+  });
+}
+
 app.disable('x-powered-by');
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '20kb' }));
 app.use((request, response, next) => {
   const origin = request.get('origin');
@@ -57,20 +85,15 @@ app.post('/api/lead', async (request, response) => {
   attempts.set(ip, now);
   const text = ['Новая заявка с сайта МедПроект', '', `Имя / компания: ${name}`, `Телефон: ${phone}`, `Сообщение: ${userMessage || 'Не указано'}`].join('\n');
   try {
-    const telegramResponse = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text }),
-      signal: AbortSignal.timeout(15_000)
-    });
-    if (!telegramResponse.ok) {
-      const telegramError = await telegramResponse.text();
-      console.error(`Telegram returned ${telegramResponse.status}:`, telegramError.slice(0, 500));
+    const telegramResponse = await sendTelegramMessage(token, chatId, text);
+    if (telegramResponse.status < 200 || telegramResponse.status >= 300) {
+      console.error(`Telegram returned ${telegramResponse.status}:`, telegramResponse.body.slice(0, 500));
       return response.status(502).json({ error: 'Message delivery failed', detail: `Telegram HTTP ${telegramResponse.status}` });
     }
     response.json({ ok: true });
   } catch (error) {
-    const detail = error instanceof Error ? `${error.name}: ${error.message}` : 'Unknown error';
+    const cause = error instanceof Error && error.cause instanceof Error ? `; cause: ${error.cause.message}` : '';
+    const detail = error instanceof Error ? `${error.name}: ${error.message}${cause}` : 'Unknown error';
     console.error('Telegram delivery failed:', detail);
     response.status(502).json({ error: 'Message delivery failed', detail });
   }
