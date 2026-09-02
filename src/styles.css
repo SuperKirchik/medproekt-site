@@ -4115,16 +4115,18 @@ html body #root .app-scale .contact-location .yandex-map {
 
 .cookie-banner {
   position: fixed;
-  right: 28px;
-  bottom: 28px;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 5000;
   display: flex;
   align-items: center;
   gap: 28px;
-  width: min(620px, calc(100vw - 56px));
-  padding: 22px 24px;
-  border: 1px solid #527877;
-  border-radius: 8px;
+  width: 100%;
+  padding: 24px max(32px, calc((100vw - 1280px) / 2));
+  border: 0;
+  border-top: 1px solid #527877;
+  border-radius: 0;
   background: var(--dark);
   color: var(--light);
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.3);
@@ -4142,15 +4144,18 @@ html body #root .app-scale .contact-location .yandex-map {
 }
 @media (max-width: 767px) {
   .cookie-banner {
-    right: max(14px, env(safe-area-inset-right, 0px));
-    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-    left: max(14px, env(safe-area-inset-left, 0px));
-    width: auto;
+    inset: 0;
+    width: 100%;
+    min-height: 100dvh;
+    max-height: 100dvh;
     max-width: none;
-    padding: 18px 18px calc(18px + env(safe-area-inset-bottom, 0px));
+    padding: calc(28px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
     flex-direction: column;
     align-items: stretch;
+    justify-content: center;
     gap: 16px;
+    overflow-y: auto;
+    border: 0;
   }
   .cookie-banner p {
     font-size: 14px;
