@@ -4146,8 +4146,7 @@ html body #root .app-scale .contact-location .yandex-map {
   .cookie-banner {
     inset: 0;
     width: 100%;
-    min-height: 100dvh;
-    max-height: 100dvh;
+    height: 100dvh;
     max-width: none;
     padding: calc(28px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
     flex-direction: column;
@@ -4157,15 +4156,15 @@ html body #root .app-scale .contact-location .yandex-map {
     overflow-y: auto;
     border: 0;
   }
+  .cookie-banner > div:first-child {
+    flex: 0 0 auto;
+  }
   .cookie-banner p {
     font-size: 14px;
   }
   .cookie-banner .btn {
     width: 100%;
     min-height: 50px;
-  }
-  html body #root .app-scale footer {
-    padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
   }
   html body #root .app-scale .contact-page-hero,
   html body #root .app-scale .service-page,
