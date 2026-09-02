@@ -2782,6 +2782,24 @@ html body #root .app-scale footer .footer-legal-links {
   html body #root .app-scale footer .footer-legal-links {
     gap: 14px 24px;
   }
+
+  html body #root .app-scale .form .consent-checkbox {
+    grid-template-columns: 28px minmax(0, 1fr);
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  html body #root .app-scale .form .consent-checkbox input {
+    position: relative;
+    z-index: 2;
+    width: 28px !important;
+    height: 28px !important;
+    min-height: 28px;
+    margin: 0;
+    padding: 0;
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
 }
 
 /* Mobile: independent responsive layout; desktop scale remains unchanged. */

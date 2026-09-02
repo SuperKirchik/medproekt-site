@@ -674,8 +674,13 @@ function ApplicationForm() {
             ))}
           </select>
         </label>
-        <label className="consent-checkbox">
-          <input name="consent" type="checkbox" value="yes" />
+        <label className="consent-checkbox" htmlFor="application-consent">
+          <input
+            id="application-consent"
+            name="consent"
+            type="checkbox"
+            value="yes"
+          />
           <span>
             Я даю{" "}
             <a href="/consent" target="_blank">
