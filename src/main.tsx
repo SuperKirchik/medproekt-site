@@ -254,27 +254,27 @@ function SiteFooter() {
   return (
     <footer>
       <img src={A + "logo.png"} />
-      <nav>
-        <a href="/#services">Услуги</a>　 <a href="/#services">Цены</a>　{" "}
-        <a href="/#treatment">Методы лечения</a>　{" "}
-        <a href="/contacts">О центре</a>　 <a href="/contacts">Контакты</a>
+      <nav className="footer-main-links">
+        <a href="/#services">Услуги</a>
+        <a href="/#services">Цены</a>
+        <a href="/#treatment">Методы лечения</a>
+        <a href="/contacts">О центре</a>
+        <a href="/contacts">Контакты</a>
       </nav>
-      <hr />
-      <div>
-        © 2026 МедПроект. Все права защищены.
-        <span className="footer-legal-links">
-          <a href="/privacy">Политика обработки персональных данных</a>
-          <a href="/consent">Согласие на обработку персональных данных</a>
-          <button
-            type="button"
-            onClick={() =>
-              window.dispatchEvent(new Event("medproekt:cookie-settings"))
-            }
-          >
-            Настройки cookie
-          </button>
-        </span>
+      <div className="footer-legal-links">
+        <a href="/privacy">Политика обработки персональных данных</a>
+        <a href="/consent">Согласие на обработку персональных данных</a>
+        <button
+          type="button"
+          onClick={() =>
+            window.dispatchEvent(new Event("medproekt:cookie-settings"))
+          }
+        >
+          Настройки cookie
+        </button>
       </div>
+      <hr />
+      <div>© 2026 МедПроект. Все права защищены.</div>
       <div id="licenses" className="legal-details">
         <strong>Общество с ограниченной ответственностью «Медпроект»</strong>
         <br />
