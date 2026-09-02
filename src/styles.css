@@ -50,6 +50,25 @@ html {
   width: 20px !important;
   height: 20px !important;
   margin: 2px 0 0;
+  padding: 0;
+  border: 2px solid var(--dark);
+  border-radius: 4px;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.consent-checkbox input:checked {
+  border-color: var(--dark);
+  background-color: var(--dark);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M3 8.5 6.5 12 13 4.5'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+}
+.consent-checkbox input:focus-visible {
+  outline: 3px solid rgba(184, 101, 84, 0.45);
+  outline-offset: 2px;
 }
 .consent-checkbox a {
   color: inherit;
@@ -140,6 +159,7 @@ html {
     padding: 18px 20px;
   }
 }
+
 .hero-copy > div > .btn {
   display: inline-flex;
   align-items: center;
@@ -4230,4 +4250,14 @@ html body #root .app-scale .contact-location .yandex-map {
   html body #root .app-scale button {
     touch-action: manipulation;
   }
+}
+
+/* Keep the custom consent mark above the final mobile input reset. */
+html body #root .app-scale .form .consent-checkbox input:checked {
+  border-color: var(--dark);
+  background-color: var(--dark);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M3 8.5 6.5 12 13 4.5'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
 }
