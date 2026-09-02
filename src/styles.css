@@ -2773,9 +2773,15 @@ html body #root .app-scale footer .footer-legal-links {
   display: flex;
   float: none;
   justify-content: center;
-  gap: 14px 32px;
+  gap: 14px 72px;
   margin-top: 18px;
   text-align: center;
+}
+
+@media (max-width: 767px) {
+  html body #root .app-scale footer .footer-legal-links {
+    gap: 14px 24px;
+  }
 }
 
 /* Mobile: independent responsive layout; desktop scale remains unchanged. */
