@@ -23,6 +23,9 @@ const mailer = smtpConfigured
       port: Number(process.env.SMTP_PORT),
       secure: process.env.SMTP_SECURE === "true",
       auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD },
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 15_000,
     })
   : null;
 
@@ -130,7 +133,11 @@ app.post("/api/lead", async (request, response) => {
       error instanceof Error
         ? `${error.name}: ${error.message}${cause}`
         : "Unknown error";
-    console.error("Email delivery failed:", detail);
+    console.error("Email delivery failed:", detail, {
+      code: error?.code,
+      command: error?.command,
+      responseCode: error?.responseCode,
+    });
     response.status(502).json({ error: "Не удалось отправить заявку" });
   }
 });
