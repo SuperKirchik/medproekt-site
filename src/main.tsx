@@ -4,7 +4,7 @@ import "./styles.css";
 
 const A = "/assets/";
 const CONSENT_VERSION = "02.09.2026";
-const COOKIE_STORAGE_KEY = "medproekt-cookie-consent-v2";
+const COOKIE_STORAGE_KEY = "medproekt-cookie-consent-v3";
 document.documentElement.dataset.site = "medproekt";
 const services = [
   ["01", "Купирование запоев", "Профессиональная медицинская помощь."],
@@ -471,6 +471,23 @@ function LegalPage({ kind }: { kind: "privacy" | "consent" }) {
     </>
   );
 }
+function loadCalltouch() {
+  if (document.querySelector('script[data-calltouch="b9rcaica"]')) return;
+  const ct = Object.assign(
+    function (...args: unknown[]) {
+      ct.callbacks.push(args);
+    },
+    { callbacks: [] as unknown[][], loaded: false, counters: ["b9rcaica"] }
+  );
+  Object.assign(window, { CalltouchDataObject: "ct", ct });
+  const script = document.createElement("script");
+  script.async = true;
+  script.dataset.calltouch = "b9rcaica";
+  const filename = typeof Array.prototype.find === "function" ? "init-min.js" : "init.js";
+  script.src = `https://mod.calltouch.ru/${filename}?id=b9rcaica`;
+  document.head.appendChild(script);
+}
+
 function CookieBanner() {
   const [visible, setVisible] = useState(
     () => !localStorage.getItem(COOKIE_STORAGE_KEY)
@@ -517,7 +534,12 @@ function CookieBanner() {
     setAnalytics(allowAnalytics);
     setVisible(false);
     setSettings(false);
-    if (allowAnalytics) loadMetrika();
+    if (allowAnalytics) {
+      loadMetrika();
+      loadCalltouch();
+    } else if (document.querySelector("script[data-metrika], script[data-calltouch]")) {
+      window.location.reload();
+    }
   };
   useEffect(() => {
     const stored = localStorage.getItem(COOKIE_STORAGE_KEY);
@@ -525,7 +547,10 @@ function CookieBanner() {
       try {
         const value = JSON.parse(stored);
         setAnalytics(Boolean(value.analytics));
-        if (value.analytics) loadMetrika();
+        if (value.analytics) {
+          loadMetrika();
+          loadCalltouch();
+        }
       } catch {
         localStorage.removeItem(COOKIE_STORAGE_KEY);
         setVisible(true);
@@ -549,7 +574,7 @@ function CookieBanner() {
       <div>
         <p>
           Мы используем необходимые cookie для работы сайта. С вашего согласия
-          мы также используем Яндекс.Метрику для аналитики посещений и
+          мы также используем Яндекс.Метрику и Calltouch для аналитики посещений и
           источников обращений. Подробнее - в{" "}
           <a href="/privacy">Политике обработки персональных данных</a>.
         </p>
@@ -560,7 +585,7 @@ function CookieBanner() {
               checked={analytics}
               onChange={(event) => setAnalytics(event.target.checked)}
             />
-            <span>Аналитические cookie (Яндекс.Метрика)</span>
+            <span>Аналитические cookie (Яндекс.Метрика и Calltouch)</span>
           </label>
         )}
       </div>
