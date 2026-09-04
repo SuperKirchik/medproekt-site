@@ -5,6 +5,7 @@ import "./styles.css";
 const A = "/assets/";
 const CONSENT_VERSION = "02.09.2026";
 const COOKIE_STORAGE_KEY = "medproekt-cookie-consent-v3";
+const METRIKA_ID = 112283127;
 document.documentElement.dataset.site = "medproekt";
 const services = [
   ["01", "Купирование запоев", "Профессиональная медицинская помощь."],
@@ -495,14 +496,14 @@ function CookieBanner() {
   const [settings, setSettings] = useState(false);
   const [analytics, setAnalytics] = useState(false);
   const loadMetrika = () => {
-    if (document.querySelector('script[data-metrika="112181042"]')) return;
+    if (document.querySelector(`script[data-metrika="${METRIKA_ID}"]`)) return;
     const script = document.createElement("script");
     script.async = true;
-    script.dataset.metrika = "112181042";
-    script.src = "https://mc.yandex.ru/metrika/tag.js?id=112181042";
+    script.dataset.metrika = String(METRIKA_ID);
+    script.src = `https://mc.yandex.ru/metrika/tag.js?id=${METRIKA_ID}`;
     script.onload = () => {
       const w = window as Window & { ym?: (...args: unknown[]) => void };
-      w.ym?.(112181042, "init", {
+      w.ym?.(METRIKA_ID, "init", {
         ssr: true,
         webvisor: true,
         clickmap: true,
