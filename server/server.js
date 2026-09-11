@@ -124,12 +124,6 @@ app.post("/api/lead", async (request, response) => {
       `Форма: ${formId}`,
       `ID события: ${eventId}`,
     ];
-    await mailer.sendMail({
-      from: process.env.MAIL_FROM || process.env.SMTP_USER,
-      to: process.env.MAIL_TO,
-      subject: `Новая заявка №${id}`,
-      text: lines.join("\n"),
-    });
     if (/^\d+$/.test(calltouchSiteId)) {
       const calltouchData = new URLSearchParams({
         fio: name,
@@ -167,6 +161,12 @@ app.post("/api/lead", async (request, response) => {
         );
       }
     }
+    await mailer.sendMail({
+      from: process.env.MAIL_FROM || process.env.SMTP_USER,
+      to: process.env.MAIL_TO,
+      subject: `Новая заявка №${id}`,
+      text: lines.join("\n"),
+    });
     response.json({ ok: true, id });
   } catch (error) {
     const cause =
