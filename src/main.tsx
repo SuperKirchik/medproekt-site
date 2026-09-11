@@ -652,9 +652,12 @@ function ApplicationForm() {
           name: String(data.get("name") || ""),
           phone: String(data.get("phone") || ""),
           service: String(data.get("service") || ""),
+          calltouchSessionId: String(
+            (window as Window & { call_value?: string }).call_value || ""
+          ),
           consent: true,
           consentVersion: CONSENT_VERSION,
-          page: window.location.pathname || "/",
+          page: window.location.href,
           formId: "main-application",
         }),
       });

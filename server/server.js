@@ -10,6 +10,7 @@ const allowedOrigins = (process.env.ALLOWED_ORIGIN || "")
   .filter(Boolean);
 const attempts = new Map();
 const CONSENT_VERSION = "02.09.2026";
+const calltouchSiteId = String(process.env.CALLTOUCH_SITE_ID || "").trim();
 const smtpConfigured = [
   "SMTP_HOST",
   "SMTP_PORT",
@@ -74,6 +75,9 @@ app.post("/api/lead", async (request, response) => {
   const name = String(request.body?.name || "").trim();
   const phone = String(request.body?.phone || "").trim();
   const service = String(request.body?.service || "").trim();
+  const calltouchSessionId = String(
+    request.body?.calltouchSessionId || ""
+  ).trim();
   const consent = request.body?.consent === true;
   const consentVersion = String(request.body?.consentVersion || "").trim();
   const sourcePage = String(request.body?.page || "").trim();
@@ -84,6 +88,7 @@ app.post("/api/lead", async (request, response) => {
     name.length > 120 ||
     phone.length > 40 ||
     service.length > 80 ||
+    calltouchSessionId.length > 200 ||
     !sourcePage ||
     sourcePage.length > 500 ||
     !formId ||
@@ -123,6 +128,43 @@ app.post("/api/lead", async (request, response) => {
       subject: `Новая заявка №${id}`,
       text: lines.join("\n"),
     });
+    if (/^\d+$/.test(calltouchSiteId)) {
+      const calltouchData = new URLSearchParams({
+        fio: name,
+        phoneNumber: phone,
+        subject: "Заявка с сайта МедПроект",
+        tags: "Форма сайта",
+        comment: service ? `Услуга: ${service}` : "Услуга не выбрана",
+        requestUrl: new URL(sourcePage, "https://24medproekt.ru").href,
+      });
+      if (calltouchSessionId) {
+        calltouchData.set("sessionId", calltouchSessionId);
+      }
+      try {
+        const calltouchResponse = await fetch(
+          `https://api.calltouch.ru/calls-service/RestAPI/requests/${calltouchSiteId}/register/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+            },
+            body: calltouchData,
+            signal: AbortSignal.timeout(10_000),
+          }
+        );
+        if (!calltouchResponse.ok) {
+          console.error("Calltouch request failed:", {
+            status: calltouchResponse.status,
+            statusText: calltouchResponse.statusText,
+          });
+        }
+      } catch (error) {
+        console.error(
+          "Calltouch request failed:",
+          error instanceof Error ? error.message : "Unknown error"
+        );
+      }
+    }
     response.json({ ok: true, id });
   } catch (error) {
     const cause =
