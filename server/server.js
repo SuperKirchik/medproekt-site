@@ -10,7 +10,9 @@ const allowedOrigins = (process.env.ALLOWED_ORIGIN || "")
   .filter(Boolean);
 const attempts = new Map();
 const CONSENT_VERSION = "02.09.2026";
-const calltouchSiteId = String(process.env.CALLTOUCH_SITE_ID || "").trim();
+const calltouchSiteId = String(
+  process.env.CALLTOUCH_SITE_ID || "85072"
+).trim();
 const smtpConfigured = [
   "SMTP_HOST",
   "SMTP_PORT",
